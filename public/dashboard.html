@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register · Lab Equipment Register</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-mark">LE</div>
+    <div>
+      <h1>Lab Equipment Register</h1>
+      <div class="sub" id="scopeLabel">loading…</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="role-pill" id="rolePill">—</span>
+    <span id="userName" style="font-size:13px;"></span>
+    <button class="btn-secondary" id="logoutBtn">Sign out</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="alerts-row">
+    <div class="alert-card warn">
+      <div class="alert-title">Still out</div>
+      <div class="alert-count" id="stillOutCount">–</div>
+      <div style="font-size:12.5px; color:var(--ink-soft); margin-top:2px;">not yet returned to the lab</div>
+    </div>
+    <div class="alert-card danger">
+      <div class="alert-title">Service overdue</div>
+      <div class="alert-count" id="overdueCount">–</div>
+      <div style="font-size:12.5px; color:var(--ink-soft); margin-top:2px;">past their next service date</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head">
+      <h2>Issue &amp; return records</h2>
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Search equipment, holder, ID…">
+        <select id="statusFilter">
+          <option value="">All statuses</option>
+          <option value="out">Still out</option>
+          <option value="returned">Returned</option>
+        </select>
+        <select id="overdueFilter">
+          <option value="">All service dates</option>
+          <option value="1">Overdue only</option>
+        </select>
+        <button class="btn-primary" id="newRecordBtn" style="width:auto; white-space:nowrap;">+ Issue equipment</button>
+      </div>
+    </div>
+    <div id="tableWrap">
+      <div class="loading-state">Loading records…</div>
+    </div>
+  </div>
+
+  <p class="footnote">Signed in as <span id="footnoteRole"></span>. Records cannot be deleted once logged — they are kept as a permanent history.</p>
+</div>
+
+<!-- Issue new equipment modal -->
+<div class="modal-backdrop" id="issueModalBackdrop">
+  <div class="modal">
+    <h3>Issue equipment</h3>
+    <div class="modal-sub">Logged under your name automatically.</div>
+    <form id="issueForm">
+      <div class="field-row">
+        <div class="field">
+          <label for="f_equipment_id">Equipment ID</label>
+          <input type="text" id="f_equipment_id" required placeholder="e.g. OSC-02">
+        </div>
+        <div class="field">
+          <label for="f_equipment_name">Equipment name</label>
+          <input type="text" id="f_equipment_name" required placeholder="e.g. Oscilloscope">
+        </div>
+      </div>
+      <div class="field">
+        <label for="f_issued_to">Issued to</label>
+        <input type="text" id="f_issued_to" required placeholder="Name of student/staff">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="f_issue_date">Issue date</label>
+          <input type="date" id="f_issue_date" required>
+        </div>
+        <div class="field">
+          <label for="f_next_service_date">Next service date</label>
+          <input type="date" id="f_next_service_date">
+        </div>
+      </div>
+      <div id="issueError" class="form-error"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancelIssueBtn">Cancel</button>
+        <button type="submit" class="btn-primary" style="width:auto;">Log issue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Mark returned modal -->
+<div class="modal-backdrop" id="returnModalBackdrop">
+  <div class="modal">
+    <h3>Mark returned</h3>
+    <div class="modal-sub" id="returnModalSub"></div>
+    <form id="returnForm">
+      <div class="field">
+        <label for="r_return_date">Return date</label>
+        <input type="date" id="r_return_date" required>
+      </div>
+      <div class="field">
+        <label for="r_condition">Condition on return</label>
+        <select id="r_condition">
+          <option value="Good">Good</option>
+          <option value="Needs Cleaning">Needs Cleaning</option>
+          <option value="Damaged">Damaged</option>
+        </select>
+      </div>
+      <div id="returnError" class="form-error"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="cancelReturnBtn">Cancel</button>
+        <button type="submit" class="btn-primary" style="width:auto;">Confirm return</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

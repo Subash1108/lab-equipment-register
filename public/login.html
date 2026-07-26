@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in · Lab Equipment Register</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="login-shell">
+  <div class="login-card">
+    <div class="login-eyebrow">Laboratory Equipment Register</div>
+    <h1>Sign in</h1>
+    <p class="login-sub">Track issue &amp; return, and stay ahead of service dates.</p>
+
+    <div id="formError" class="form-error"></div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn-primary" id="loginBtn">Sign in</button>
+    </form>
+
+    <div class="demo-creds">
+      <div style="margin-bottom:6px; font-weight:600; color: var(--ink);">Demo accounts (for testing)</div>
+      <div class="cred-row"><span>ravi.tech</span><span>TechPass123!</span></div>
+      <div class="cred-row"><span>meena.tech</span><span>TechPass456!</span></div>
+      <div class="cred-row"><span>arjun.incharge</span><span>InchargePass789!</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('loginForm');
+  const errorBox = document.getElementById('formError');
+  const loginBtn = document.getElementById('loginBtn');
+
+  // If already logged in, skip straight to the dashboard.
+  fetch('/api/auth/session').then(r => r.json()).then(data => {
+    if (data.loggedIn) window.location.href = '/dashboard.html';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove('visible');
+    loginBtn.disabled = true;
+    loginBtn.textContent = 'Signing in…';
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        errorBox.textContent = data.error || 'Sign in failed. Please try again.';
+        errorBox.classList.add('visible');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Sign in';
+        return;
+      }
+
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      errorBox.textContent = 'Could not reach the server. Please try again.';
+      errorBox.classList.add('visible');
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Sign in';
+    }
+  });
+</script>
+</body>
+</html>
