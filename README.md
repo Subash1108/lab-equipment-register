@@ -144,3 +144,7 @@ user) and the exact results.
   for CI.
 - No pagination on the records table — fine for a lab's real equipment
   count, but would need it at much larger scale.
+
+## ScreenShots
+![Login page](screenshots/Loginpage.png)
+![Dashboard](screenshots/Equipment.png)
